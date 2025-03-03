@@ -1,12 +1,22 @@
 package com.example.jmeter.demo.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.jmeter.demo.model.User;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/user")
 public class Controller {
     @GetMapping
-    public User
+    public ResponseEntity<String> get() {
+        return ResponseEntity.ok("{\"message\": \"response success\"}");
+    }
+
+    @PostMapping
+    public ResponseEntity<User> post(@RequestBody User user) {
+        user.setCurrentDate(LocalDateTime.now());
+        return ResponseEntity.ok(user);
+    }
 }

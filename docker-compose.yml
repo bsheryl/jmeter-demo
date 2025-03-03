@@ -1,7 +1,7 @@
 version: '3.8'
 services:
-  jmeter-demo:
-    image: jmeter-demo
+  app:
+    image: jmeter-demo-app
     build:
       context: .
       dockerfile: Dockerfile
