@@ -31,7 +31,7 @@ public class Controller {
 
     @GetMapping("/withParam")
     @Timed(value = "get_method_with_param_execution_time", description = "Time taken to execute GET method with param")
-    public ResponseEntity<User> getWithParam(@PathVariable String login, @PathVariable String password) {
+    public ResponseEntity<User> getWithParam(@RequestParam String login, @RequestParam String password) {
         User user = new User();
         user.setLogin(login);
         user.setPassword(password);
