@@ -1,6 +1,6 @@
 package com.example.jmeter.demo.controller;
 
-import com.example.jmeter.demo.model.User;
+import com.example.jmeter.demo.entity.User;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +32,16 @@ public class Controller {
     @GetMapping("/withParam")
     @Timed(value = "get_method_with_param_execution_time", description = "Time taken to execute GET method with param")
     public ResponseEntity<User> getWithParam(@RequestParam String login, @RequestParam String password) {
+        User user = new User();
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setCurrentDate(LocalDateTime.now());
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/withHeader")
+    @Timed(value = "get_method_with_header_execution_time", description = "Time taken to execute GET method with header")
+    public ResponseEntity<User> getWithHeader(@RequestHeader String login, @RequestHeader String password) {
         User user = new User();
         user.setLogin(login);
         user.setPassword(password);
