@@ -144,8 +144,42 @@ services:
     networks:
       - jmeter-demo
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    networks:
+      - jmeter-demo
+    ports:
+      - "3000:3000"
+    user: "1000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel"
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks:
+      - jmeter-demo
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+#      - $DOCKERDIR/appdata/influxdb2/config:/etc/influxdb2
+#      - $DOCKERDIR/appdata/influxdb2/db:/var/lib/influxdb2
+      - influxdb-storage-config:/etc/influxdb2
+      - influxdb-storage-db:/var/lib/influxdb2
+
 volumes:
   db-data:
+  grafana-storage:
+  influxdb-storage-config:
+  influxdb-storage-db:
 #  pgadmin-data:
 
 networks:
