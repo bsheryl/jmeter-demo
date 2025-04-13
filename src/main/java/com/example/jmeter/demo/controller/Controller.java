@@ -4,6 +4,7 @@ import com.example.jmeter.demo.entity.Email;
 import com.example.jmeter.demo.entity.User;
 import com.example.jmeter.demo.repository.EmailRepository;
 import com.example.jmeter.demo.repository.UserRepository;
+import com.example.jmeter.demo.utils.Factorial;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class Controller {
     private final EmailRepository emailRepository;
 
     @GetMapping
-    @Timed(value = "simple_get_method_execution_time", description = "Time taken to execute simple GET method")
+    @Timed(value = "simple_get_method_execution", description = "Time taken to execute simple GET method")
     public ResponseEntity<User> get() {
         User user = new User();
         user.setLogin("myUser");
@@ -31,7 +32,7 @@ public class Controller {
 
     @PostMapping
     @Transactional
-    @Timed(value = "simple_post_method_execution_time", description = "Time taken to execute simple POST method")
+    @Timed(value = "simple_post_method_execution", description = "Time taken to execute simple POST method")
     public ResponseEntity<User> post(@RequestBody User user) {
         if (user.getLogin() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("Login or password is empty");
@@ -52,7 +53,7 @@ public class Controller {
 
     @GetMapping("/withParam")
     @Transactional
-    @Timed(value = "get_method_with_param_execution_time", description = "Time taken to execute GET method with param")
+    @Timed(value = "get_method_with_param_execution", description = "Time taken to execute GET method with param")
     public ResponseEntity<User> getWithParam(@RequestParam String login, @RequestParam String password,
                                              @RequestParam(required = false) String email) {
         if (login == null || password == null) {
@@ -67,7 +68,7 @@ public class Controller {
 
     @GetMapping("/withHeader")
     @Transactional
-    @Timed(value = "get_method_with_header_execution_time", description = "Time taken to execute GET method with header")
+    @Timed(value = "get_method_with_header_execution", description = "Time taken to execute GET method with header")
     public ResponseEntity<User> getWithHeader(@RequestHeader String login, @RequestHeader String password,
                                               @RequestHeader(required = false) String email) {
         if (login == null || password == null) {
@@ -82,7 +83,7 @@ public class Controller {
 
     @GetMapping("/findByLogin/{login}")
     @Transactional
-    @Timed(value = "find_by_login_method_time", description = "Time taken to execute GET method find user by login")
+    @Timed(value = "find_by_login_method", description = "Time taken to execute GET method find user by login")
     public ResponseEntity<User> findByLogin(@PathVariable String login) {
         var user = userRepository.findById(login);
         if (user.isEmpty()) {
@@ -104,8 +105,9 @@ public class Controller {
     }
 
     @KafkaListener(topics = "jmeter-topic", groupId = "myGroupId")
-    @Timed(value = "kafka_consumer_time", description = "Time consume kafka topic")
+    @Timed(value = "kafka_consumer", description = "Time consume kafka topic")
     public void listenGroupFoo(User user) {
+        Factorial.factorial(15);
         System.out.println("Received Message in group myGroupId: " + user);
     }
 }
